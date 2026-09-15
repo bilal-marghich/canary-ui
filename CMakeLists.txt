@@ -8,8 +8,10 @@ add_subdirectory(lvgl)
 
 find_package(SDL2 REQUIRED)
 
-add_executable(canary-ui src/main.c)
-
+add_executable(canary-ui
+    src/main.c
+    src/system_stats.c
+)
 target_link_libraries(canary-ui PRIVATE
     lvgl
     SDL2::SDL2

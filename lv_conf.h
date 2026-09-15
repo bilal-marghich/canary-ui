@@ -760,7 +760,7 @@
 #define LV_USE_EXT_DATA 0
 
 /** Use `float` instead of `int32_t` for coordinates and values that need sub-pixel precision. */
-#define LV_USE_FLOAT 0
+#define LV_USE_FLOAT 1
 
 /** Bind widgets to subject variables so they update automatically when the value changes. */
 #define LV_USE_OBSERVER 1
