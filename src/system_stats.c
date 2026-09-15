@@ -24,12 +24,8 @@ float _get_cpu_percent()
         free(values2);
         return -1.0f;
     }
-
-
     /* ---------- First CPU sample ---------- */
-
     procfile = fopen("/proc/stat", "r");
-
     if (procfile == NULL) {
         perror("Cannot open /proc/stat");
         free(values1);
@@ -38,33 +34,24 @@ float _get_cpu_percent()
     }
 
     if (fgets(buffer, sizeof(buffer), procfile)) {
-
         char *token = strtok(buffer, " ");
-
         /* Skip "cpu" */
         token = strtok(NULL, " ");
-
         int i = 0;
-
         while (token != NULL && i < CPU_FIELDS) {
             values1[i] = strtol(token, NULL, 10);
             i++;
             token = strtok(NULL, " ");
         }
     }
-
     fclose(procfile);
-
-
     /* Wait before taking the second sample */
-
     sleep(INTERVAL_SECONDS);
 
 
     /* ---------- Second CPU sample ---------- */
 
     procfile = fopen("/proc/stat", "r");
-
     if (procfile == NULL) {
         perror("Cannot open /proc/stat");
         free(values1);
@@ -73,32 +60,23 @@ float _get_cpu_percent()
     }
 
     if (fgets(buffer, sizeof(buffer), procfile)) {
-
         char *token = strtok(buffer, " ");
-
         /* Skip "cpu" */
         token = strtok(NULL, " ");
-
         int i = 0;
-
         while (token != NULL && i < CPU_FIELDS) {
             values2[i] = strtol(token, NULL, 10);
             i++;
             token = strtok(NULL, " ");
         }
     }
-
     fclose(procfile);
-
-
     /* ---------- Calculate CPU usage ---------- */
-
     long idle1 = values1[3] + values1[4];
     long idle2 = values2[3] + values2[4];
 
     long total1 = 0;
     long total2 = 0;
-
     /* Ignore guest and guest_nice */
     for (int i = 0; i < 8; i++) {
         total1 += values1[i];
