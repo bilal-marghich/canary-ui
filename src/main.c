@@ -31,7 +31,7 @@ int main(void)
     lv_subject_t *memValue = make_float_subject(24);
     lv_subject_t *diskValue = make_float_subject(23);
     lv_subject_t *uptimeValue = make_float_subject(22.1);
-    lv_subject_t *tempValue = make_int_subject(21);
+    lv_subject_t *tempValue = make_int_subject(_get_temp());
 
 
     lv_obj_t *cpuLabel = lv_label_create(lv_screen_active());

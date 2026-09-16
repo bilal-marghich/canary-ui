@@ -1,6 +1,4 @@
 #include "system_stats.h"
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -97,4 +95,24 @@ float _get_cpu_percent()
     free(values2);
 
     return cpu_percent;
+}
+
+int _get_temp(){
+    FILE *tempfile;
+    // file location for st :/sys/devices/virtual/thermal/thermal_zone0/hwmon0/temp1_input  as for ubuntu /sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input
+    tempfile=fopen("/sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input","r");
+    if(tempfile== NULL)
+    {
+        printf("can't open temp file.\n");
+        return -1;
+    }
+    int temp;
+    if(fscanf(tempfile,"%d",&temp)!=1)
+    {
+        printf("can't read temp file.\n");
+        fclose(tempfile);
+        return -1;
+    }
+    fclose(tempfile);
+    return temp/1000;
 }
