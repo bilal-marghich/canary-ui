@@ -2,6 +2,8 @@
 
 A small LVGL dashboard showing live system stats (CPU, memory, disk, temperature, uptime), built to run on the LCD of an STM32MP135F-DK board as part of the [CANARY](https://github.com/bilal-marghich/canary) project.
 
+![CANARY dashboard](images/dashboard.png)
+
 Runs on desktop Linux (SDL backend) for development, and is meant to be cross-compiled into a Yocto image via a `.bb` recipe fetching this repo.
 
 ## Building on desktop (SDL)
