@@ -102,8 +102,7 @@ float _get_cpu_percent()
 
 int _get_temp_celsius(){
     FILE *tempfile;
-    // file location for st :/sys/devices/virtual/thermal/thermal_zone0/hwmon0/temp1_input  as for ubuntu /sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input
-    tempfile=fopen("/sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input","r");
+    tempfile=fopen("/sys/class/thermal/thermal_zone0/temp","r");
     if(tempfile== NULL)
     {
         printf("can't open temp file.\n");
