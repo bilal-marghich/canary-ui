@@ -3,9 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/sysinfo.h>
+#include <sys/statvfs.h>
 
 #define INTERVAL_SECONDS 1
 #define CPU_FIELDS 10
+
+
 
 
 float _get_cpu_percent()
@@ -115,4 +119,57 @@ int _get_temp(){
     }
     fclose(tempfile);
     return temp/1000;
+}
+
+struct system_memory_stats _get_system_memory_uptime()
+{
+    struct sysinfo info;
+    struct system_memory_stats stats = {0};
+    
+    if (sysinfo(&info) != 0) {
+        perror("sysinfo");
+        return stats;
+    }
+    // MEMORY
+    unsigned long total_bytes = info.totalram * info.mem_unit;
+    unsigned long free_bytes = info.freeram * info.mem_unit;
+    unsigned long used_bytes = total_bytes - free_bytes;
+    //UPTIME
+    unsigned long uptime_seconds = info.uptime;
+    unsigned long hours = uptime_seconds / 3600;
+    unsigned long minutes = (uptime_seconds % 3600) / 60;
+    unsigned long seconds = uptime_seconds % 60;
+
+    stats.total_ram = total_bytes;
+    stats.uptime_hours = hours;
+    stats.uptime_minutes = minutes;
+    stats.uptime_seconds = seconds;
+    stats.used_ram = used_bytes;
+
+    return stats;    
+}
+
+
+
+struct system_disk_stats get_system_disk_stats()
+{
+    const char *path = "/";
+    struct statvfs buf;
+    struct system_disk_stats stats = {0};
+
+    if (statvfs(path, &buf) != 0) {
+        perror("statvfs");
+        return stats;
+    }
+
+    unsigned long long total =(unsigned long long)buf.f_blocks * buf.f_frsize;
+    unsigned long long free =(unsigned long long)buf.f_bfree * buf.f_frsize;
+    unsigned long long available =(unsigned long long)buf.f_bavail * buf.f_frsize;
+    unsigned long long used = total - free;
+
+    stats.total_disk = total;
+    stats.used_disk = used;
+    stats.available_disk = available;
+
+    return stats;
 }
