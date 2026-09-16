@@ -4,6 +4,9 @@ project(canary-ui C)
 
 set(CMAKE_C_STANDARD 11)
 
+set(CONFIG_LV_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(CONFIG_LV_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
+
 add_subdirectory(lvgl)
 
 find_package(SDL2 REQUIRED)
