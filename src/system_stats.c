@@ -50,7 +50,6 @@ float _get_cpu_percent()
     /* Wait before taking the second sample */
     sleep(INTERVAL_SECONDS);
 
-
     /* ---------- Second CPU sample ---------- */
 
     procfile = fopen("/proc/stat", "r");
@@ -101,7 +100,7 @@ float _get_cpu_percent()
     return cpu_percent;
 }
 
-int _get_temp(){
+int _get_temp_celsius(){
     FILE *tempfile;
     // file location for st :/sys/devices/virtual/thermal/thermal_zone0/hwmon0/temp1_input  as for ubuntu /sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input
     tempfile=fopen("/sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input","r");
@@ -151,7 +150,7 @@ struct system_memory_stats _get_system_memory_uptime()
 
 
 
-struct system_disk_stats get_system_disk_stats()
+struct system_disk_stats _get_system_disk_stats()
 {
     const char *path = "/";
     struct statvfs buf;
@@ -172,4 +171,18 @@ struct system_disk_stats get_system_disk_stats()
     stats.available_disk = available;
 
     return stats;
+}
+
+float _get_mem_percent(void)
+{
+    struct system_memory_stats s = _get_system_memory_uptime();
+    if (s.total_ram == 0) return 0.0f;
+    return ((float)s.used_ram / (float)s.total_ram) * 100.0f;
+}
+ 
+float _get_disk_percent(void)
+{
+    struct system_disk_stats s = _get_system_disk_stats();
+    if (s.total_disk == 0) return 0.0f;
+    return ((float)s.used_disk / (float)s.total_disk) * 100.0f;
 }
